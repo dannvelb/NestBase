@@ -1,8 +1,12 @@
-export class LoginDto {
+export type DTOLogin = {
   email: string;
   password: string;
 }
 
-export interface ITokenPayload {
-  idx: number;
+export type TTokenPayload = {
+  code: string;
+}
+
+export type TReqToken = {
+  user: string;
 }

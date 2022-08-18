@@ -1,37 +1,30 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { use } from 'passport';
 import { TaskService } from 'src/task/task.service';
-import { ITokenPayload } from './auth.dto';
+import { TReqToken, TTokenPayload } from './auth.dto';
 
-class LoginAuth {
-  user: string;
-  clientCode: string;
-  constructor() {
-    this.user = '';
-    this.clientCode = '';
-  }
-}
 @Injectable()
 export class AuthService {
   constructor(
     private readonly taskService: TaskService,
     private readonly jwtService: JwtService,
   ) {}
-  validateUser = async (code: string) => {
-    const result = await this.taskService.getByCode(code);
+  validateCode = async (code: string) => {
+    const result = await this.taskService.getByCode(code.toString());
     if (result) {
-      return code;
+      return code.toUpperCase();
     } else {
-      return (Math.random() + 1).toString(36).substring(8);
+      return (Math.random() + 1).toString(36).substring(3).toUpperCase();
     }
   };
 
-  login = async (result: any) => {
-    const payload: any = {
-      code: result.user,
+  login = async ({ user }: TReqToken) => {
+    const payload: TTokenPayload = {
+      code: user,
     };
     return {
-      code: result.user,
+      code: user,
       token: this.jwtService.sign(payload),
     };
   };

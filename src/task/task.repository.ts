@@ -49,9 +49,7 @@ export class Repository {
 
   get = async (codigo: string) => {
     return await this.repository.findAll({
-      where: {
-        codigo,
-      },
+      
     });
   };
 }
